@@ -1,31 +1,44 @@
 <template>
-  <div>
-    Index
-    <!-- <el-collapse-transition>
-        <div v-show="show3">
-          <div class="transition-box">el-collapse-transition</div>
-          <div class="transition-box">el-collapse-transition</div>
-        </div>
-      </el-collapse-transition> -->
-  </div>
+  <el-container>
+    <el-main>
+      <Bannar class="banner"/>
+    </el-main>
+    <el-footer>
+      <el-divider/>
+      <p>版本归个人所有</p>
+    </el-footer>
+  </el-container>
 </template>
 
 <script>
-import {ApiBannar} from '../../js/Api'
+import Bannar from './element/Bannar'
 
 export default {
   name: 'Index',
-  data () {
-    return {
-      msg: 'Index'
-    }
+  components: {
+    Bannar
   },
-  async mounted () {
-    const bannarData = await ApiBannar();
+  data () {
+    return {}
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-container {
+  height: 100%;
+}
+.el-main {
+  margin: 20px;
+}
+.el-footer {
+  font-size: 13px;
+  color: #909399;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.el-footer .el-divider {
+  margin: 0;
+}
 </style>

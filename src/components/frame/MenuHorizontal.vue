@@ -31,19 +31,25 @@ export default {
     line-height: 30px;
     padding-right: 10px;
 }
+.el-menu.el-menu--horizontal {
+    border-bottom: none;
+}
 .el-menu--horizontal>.el-menu-item {
     border-bottom: none;
     line-height: 30px;
     height: 30px;
     padding: 0 5px;
 }
-.el-menu--horizontal>.el-menu-item.is-active {
+.el-menu--horizontal>.el-menu-item.is-active,.el-menu--horizontal>.el-menu-item:hover,.el-menu--horizontal>.el-menu-item:focus {
     border-bottom: none;
     color: darksalmon;
     font-weight: 600;
     line-height: 30px;
     height: 30px;
     padding: 0 5px;
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    color: darksalmon;
 }
 .el-menu-item i{
     margin: 0 0;

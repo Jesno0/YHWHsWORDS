@@ -52,7 +52,7 @@ export default {
 }
 .el-menu {
     position: absolute;
-    z-index: 2;
+    z-index: 999;
     top: 0;
     right: 0;
     height: 100%;
@@ -74,7 +74,7 @@ export default {
 }
 .mask {
     position: absolute;
-    z-index: 1;
+    z-index: 998;
     top: 0;
     left: 0;
     width: 100%;

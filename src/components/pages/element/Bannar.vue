@@ -1,8 +1,8 @@
 <template>
 <div id="bannar">
-  <el-carousel trigger="click" height="160px">
+  <el-carousel trigger="click" height="200px">
     <el-carousel-item v-for="item in list" :key="item.title">
-      <h3>{{ item.title }}</h3>
+      <h1>{{ item.title }}</h1>
       <p>{{ item.content }}</p>
     </el-carousel-item>
   </el-carousel>
@@ -30,11 +30,11 @@ export default {
   background-color: blanchedalmond;
   padding: 0 20px;
 }
-h3 {
+h1 {
   color: #bb8033;
 }
 p {
   color: #716f6c;
-  font-size: 14px;
+  font-size: 18px;
 }
 </style>

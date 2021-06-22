@@ -2,10 +2,7 @@
   <el-container>
     <el-header>头部：待处理</el-header>
     <el-main>
-      <div class="words" v-for="item in words" :key="item.id">
-        <button>{{item.id}}</button>
-        <p>{{item.name}}</p>
-      </div>
+      <Words :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id"/>
     </el-main>
     <el-footer>脚部：待处理</el-footer>
   </el-container>
@@ -13,22 +10,27 @@
 
 <script>
 import {ApiBibleVersion,ApiBibleBook,ApiBibleWord} from '../../js/Api'
+import Words from './element/bible/Words'
 
 export default {
   name: 'Bible',
+  components: {
+    Words
+  },
   data () {
     return {
       versions: [],
       books: [],
       chapters: [],
-      words: []
+      currentVersionIndex: 0,
+      currentBookIndex: 0,
+      currentChapterIndex: 0
     }
   },
   async mounted () {
     this.versions = await ApiBibleVersion();
     this.books = await ApiBibleBook();
     this.chapters = toChapter(this.books[0].chapterCount);
-    this.words = await ApiBibleWord(this.books[0].id, this.chapters[0].id);
   }
 }
 
@@ -43,14 +45,4 @@ function toChapter(num) {
 </script>
 
 <style scoped>
-.words {
-  display: flex;
-  align-items: center;
-}
-.words button {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  margin: 5px;
-}
 </style>

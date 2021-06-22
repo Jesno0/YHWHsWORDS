@@ -45,7 +45,6 @@ export default {
 <style scoped>
 .el-icon-menu {
     margin-right: 10px;
-    font-size: 25px;
 }
 .el-icon-menu:hover {
     color: darksalmon;
@@ -62,6 +61,7 @@ export default {
 .el-menu-item {
     height: auto;
     color: #909399;
+    font-size: 18px;
 }
 .el-menu-item:focus, .el-menu-item:hover {
     color: #303133;
@@ -71,6 +71,9 @@ export default {
     color: darksalmon;
     background-color: #f9eecec7;
     font-weight: 600;
+}
+.el-menu-item i {
+    height: 23px;
 }
 .mask {
     position: absolute;

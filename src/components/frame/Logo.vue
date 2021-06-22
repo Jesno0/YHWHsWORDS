@@ -17,7 +17,7 @@ export default {
   width: 100px;
   height: 100px;
   text-align: center;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 550;
   background-color:#fe7865;
   color: white;
@@ -38,6 +38,6 @@ img {
 a {
   text-decoration: none;
   color: #273849;
-  font-size: 15px;
+  font-size: 18px;
 }
 </style>

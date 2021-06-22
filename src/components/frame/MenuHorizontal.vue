@@ -24,21 +24,18 @@ export default {
 </script>
 
 <style scoped>
-.el-menu--horizontal {
-    border-bottom: none;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 15px;
-    line-height: 30px;
-    padding-right: 10px;
-}
 .el-menu.el-menu--horizontal {
     border-bottom: none;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height: 30px;
+    padding-right: 10px;
 }
 .el-menu--horizontal>.el-menu-item {
     border-bottom: none;
     line-height: 30px;
     height: 30px;
     padding: 0 5px;
+    font-size: 18px;
 }
 .el-menu--horizontal>.el-menu-item.is-active,.el-menu--horizontal>.el-menu-item:hover,.el-menu--horizontal>.el-menu-item:focus {
     border-bottom: none;
@@ -53,12 +50,10 @@ export default {
 }
 .el-menu-item i{
     margin: 0 0;
-    width: 18px;
     display: none;
 }
 .el-menu-item.is-active i{
     margin: 0 0;
-    width: 18px;
     display: contents;
 }
 </style>

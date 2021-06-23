@@ -1,7 +1,8 @@
 <template>
   <el-table :data="list" :show-header="false" :row-class-name="rowClassName" :cell-class-name="cellClassName">
     <el-table-column width="30">
-        <button slot-scope="scope">{{ scope.row.id }}</button>
+        <span slot-scope="scope">{{scope.row.id}}</span>
+        <!-- <button slot-scope="scope">{{scope.row.id}}</button> -->
     </el-table-column>
     <el-table-column prop="name"></el-table-column>
     <el-table-column v-if="false" width="35">
@@ -15,7 +16,7 @@
 import {ApiBibleWord} from '../../../../js/Api'
 
 export default {
-  name: 'Bannar',
+  name: 'Word',
   props: {
     bookId: {
         type: Number
@@ -65,6 +66,12 @@ export default {
 </script>
 
 <style scoped>
+.el-table .cell-num span {
+    color: indianred;
+    display: flex;
+    justify-content: center;
+    word-break: normal;
+}
 .el-table .cell-num button {
     width: 30px;
     height: 20px;
@@ -89,6 +96,7 @@ export default {
 .el-table .cell-word {
     padding-left: 5px;
     padding-right: 4px;
+    font-size: 18px;
 }
 .el-table .cell {
     padding: 0px;

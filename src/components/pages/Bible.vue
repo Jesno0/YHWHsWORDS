@@ -1,36 +1,97 @@
 <template>
-  <el-container>
-    <el-header>头部：待处理</el-header>
-    <el-main>
-      <Words :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id"/>
-    </el-main>
-    <el-footer>脚部：待处理</el-footer>
-  </el-container>
+  <el-tabs v-model="currentCatalogueName" type="card">
+    <el-tab-pane :label="currentVersionName" name="1" disabled></el-tab-pane>
+    <el-tab-pane label=">" name="1-1" disabled></el-tab-pane>
+
+    <el-tab-pane :label="currentBookTypeName" name="2">
+      <TabRadio $ref="$bookType" :list="bookTypes" :index="currentBookTypeIndex" v-on:select="handleTabSelect"/>
+    </el-tab-pane>
+    <el-tab-pane label=">" name="2-1" disabled></el-tab-pane>
+
+    <el-tab-pane :label="currentBookName" name="3">
+      <TabRadio $ref="$book" :list="books" :index="currentBookIndex" v-on:select="handleTabSelect"/>
+    </el-tab-pane>
+    <el-tab-pane label=">" name="3-1" disabled></el-tab-pane>
+
+    <el-tab-pane :label="currentChapterName" name="4">
+      <TabRadio $ref="$chapter" :list="chapters" :index="currentChapterIndex" v-on:select="handleTabSelect"/>
+    </el-tab-pane>
+    <el-tab-pane label=">" name="4-1" disabled></el-tab-pane>
+    
+    <el-tab-pane label="经文" name="5">
+      <WordPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length"/>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
-import {ApiBibleVersion,ApiBibleBook,ApiBibleWord} from '../../js/Api'
-import Words from './element/bible/Words'
+import {ApiBibleVersion,ApiBibleBookType,ApiBibleBook,ApiBibleWord} from '../../js/Api'
+import WordPane from './element/bible/WordPane'
+import TabRadio from './element/bible/TabRadio'
 
 export default {
   name: 'Bible',
   components: {
-    Words
+    WordPane,
+    TabRadio
   },
   data () {
     return {
       versions: [],
+      bookTypes: [],
       books: [],
       chapters: [],
       currentVersionIndex: 0,
+      currentVersionName: "版本",
+      currentBookTypeIndex: 1,
+      currentBookTypeName: "新约",
       currentBookIndex: 0,
-      currentChapterIndex: 0
+      currentBookName: "书卷",
+      currentChapterIndex: 0,
+      currentChapterName: "章节",
+      currentCatalogueName: '5'
     }
   },
   async mounted () {
     this.versions = await ApiBibleVersion();
-    this.books = await ApiBibleBook();
-    this.chapters = toChapter(this.books[0].chapterCount);
+    this.currentVersionName = this.versions[0].name;
+    this.bookTypes = await ApiBibleBookType();
+    this.currentBookTypeName = this.bookTypes[1].name;
+    await this.updateBooks();
+  },
+  methods: {
+    async updateBooks (_bookTypeIndex=1) {
+      this.books = await ApiBibleBook(this.bookTypes[_bookTypeIndex].id);
+      this.currentBookIndex = 0;
+      this.currentBookName = this.books[0].name;
+      this.updateChapters();
+    },
+    updateChapters (_bookIndex=0) {
+      this.chapters = toChapter(this.books[_bookIndex].chapterCount);
+      this.currentChapterIndex = 0;
+      this.currentChapterName = this.chapters[0].name;
+    },
+    async handleTabSelect (e) {
+      const tabIndex = parseInt(this.currentCatalogueName);
+      const {$ref:_ref,index:_index} = e;
+      switch(_ref) {
+        case '$bookType':
+          this.currentBookTypeIndex = _index;
+          this.currentBookTypeName = this.bookTypes[_index].name;
+          await this.updateBooks(_index);
+          break;
+        case '$book':
+          this.currentBookIndex = _index;
+          this.currentBookName = this.books[_index].name;
+          this.updateChapters(_index);
+          break;
+        case '$chapter':
+          this.currentChapterIndex = _index;
+          this.currentChapterName = this.chapters[_index].name;
+          break;
+      }
+      this.currentCatalogueName = String(tabIndex+1);
+    }
   }
 }
 
@@ -45,4 +106,25 @@ function toChapter(num) {
 </script>
 
 <style scoped>
+</style>
+<style>
+.el-tabs--card>.el-tabs__header .el-tabs__nav {
+  border: none;
+  margin-top: 10px;
+}
+.el-tabs--card>.el-tabs__header {
+  border: none;
+  margin-bottom: 2px;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__item {
+  border: none;
+  padding: 0;
+  font-size: 18px;
+}
+.el-tabs__content {
+  margin: 0 5px;
+}
+.el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2) {
+  padding-left: 5px;
+}
 </style>

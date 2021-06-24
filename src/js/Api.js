@@ -10,6 +10,12 @@ const host = "/api";
 // const host = "http://3g8oacl.nat.ipyingshe.com";//build_test
 // const host = "";//build
 
+
+let Vue;
+const install = function (_Vue) {
+    Vue = _Vue;
+};
+
 const ApiBannar = async function () {
     return [{
         iconTxt: "阅读圣经打卡",
@@ -65,6 +71,73 @@ const ApiBibleWord = async function (bookId, charpterNo) {
     });
 };
 
+const ApiBiblePunchIn = async function () {
+    return "";//TODO
+}
+
+const ApiLogin = async function (account,password) {
+    return "";//TODO ：1.接口，2. 写入session
+}
+
+const ApiLogout = async function () {
+    return "";//TODO ：1.接口，2. 清除session
+}
+
+const ApiRegister = async function (account,password) {
+    return "";//TODO
+}
+
+const ApiResetPassword = async function (account,email) {
+    return "";//TODO
+}
+
+const ApiUserData = async function () {
+    // const data = await post('/user/loadData');
+    const data = {
+        "dakaTime": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "yiduOfAll": [
+            0, 1189
+        ],
+        "dakaDate": [
+            "6-18",
+            "6-19",
+            "6-20",
+            "6-21",
+            "6-22",
+            "6-23",
+            "6-24"
+        ],
+        "yiduzhanbi": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ]
+    };
+
+    return data;
+}
+
+function post(url,data,params,not_form) {
+    return request("post",url,data,params,not_form);
+}
+
+function get(url,params) {
+    return request("get",url,null,params,not_form);
+}
+
 function request (method, url, data, params, not_form) {
     const opts = {
         method,
@@ -72,6 +145,7 @@ function request (method, url, data, params, not_form) {
         params,
         data
     };
+
     if(!not_form) {
         opts.transformRequest = [
             function (val) {
@@ -88,19 +162,29 @@ function request (method, url, data, params, not_form) {
         };
     }
     return Axios(opts).then(function (result) {
-        if ((result.status >= 500) && (result.status <= 600)) return Promise.reject('服务器错误，可联系技术人员');
-        if (result.status !== 200) return Promise.reject(result);
+        if ((result.status >= 500) && (result.status <= 600)) return alert('服务器错误，可稍候再试');
+        if (result.status !== 200) return alert(result);
         result = result.data;
         if (result.constructor !== Object) return result;
-        if (result.ok !== 0) return Promise.reject(result);
+        if (result.ok !== 0) {
+            alert(JSON.parse(result));
+            return Promise.reject(result);
+        }
         return result.data;
     })
 }
 
 export {
+    install,
+    ApiLogin,//登陆
+    ApiLogout,//退出
+    ApiRegister,//注册
+    ApiResetPassword,//修改密码
     ApiBannar,//首页走马灯：目前写死
     ApiBibleVersion,//圣经版本
     ApiBibleBookType,//圣经新/旧约（写死）
     ApiBibleBook,//圣经书卷
-    ApiBibleWord//圣经每章经文
+    ApiBibleWord,//圣经每章经文
+    ApiBiblePunchIn,//圣经每章经文
+    ApiUserData//用户数据
 }

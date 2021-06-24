@@ -121,10 +121,10 @@ function toChapter(num) {
   padding: 0;
   font-size: 18px;
 }
-.el-tabs__content {
-  margin: 0 5px;
-}
-.el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--bottom.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2), .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2) {
+.el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2) {
   padding-left: 5px;
+}
+.el-tabs__content {
+  margin: 0;
 }
 </style>

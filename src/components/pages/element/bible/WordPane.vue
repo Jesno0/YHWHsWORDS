@@ -1,21 +1,25 @@
 <template>
     <div>
-        <Word class="word" :bookId="bookId" :chapterId="chapterId"/>
+        <Word class="word" :bookId="bookId" :chapterId="chapterId_v"/>
         <div class="footer">
             <el-button type="primary" icon="el-icon-arrow-left" circle :disabled="!isPreviousShow" @click="handlePrevious"></el-button>
-            <el-button type="text" class="punch">打卡</el-button>
+            <el-button type="text" class="punch-in" @click="handlePunchIn">打卡</el-button>
             <el-button type="primary" icon="el-icon-arrow-right" circle :disabled="!isNextShow" @click="handleNext"></el-button>
         </div>
+        <Auth :visible.sync="isAuthShow"/>
     </div>
 </template>
 
 <script>
 import Word from './Word'
+import Auth from '../../../common/Auth'
+import {ApiBiblePunchIn} from '../../../../js/Api'
 
 export default {
   name: 'WordPane',
   components: {
-      Word
+      Word,
+      Auth
   },
   props: {
     bookId: {
@@ -29,7 +33,7 @@ export default {
     }
   },
   watch: {
-    chapterId(newV,oldV) {
+    chapterId(newV) {
         this.chapterId_v = newV;
         this.updateArrow();
     },
@@ -41,6 +45,7 @@ export default {
     return {
       isPreviousShow: false,
       isNextShow: true,
+      isAuthShow: true,
       chapterId_v: 1
     }
   },
@@ -49,7 +54,6 @@ export default {
   },
   methods: {
     updateArrow () {
-        console.log(this.chapterId_v,this.chapterCount);
         this.isPreviousShow = this.chapterId_v > 1;
         this.isNextShow = this.chapterId_v < this.chapterCount;
     },
@@ -58,13 +62,23 @@ export default {
     },
     handleNext () {
         this.updateArrow(++this.chapterId_v);
+    },
+    async handlePunchIn () {
+        if(!this.$session.get("user")) {
+            this.$toast("请先登录");
+            this.isAuthShow = true;
+        }
+    },
+    async submitPunchIn () {
+        await ApiBiblePunchIn();
+        //TODO: 打卡后界面的变动
     }
   }
 }
 </script>
 
 <style scoped>
-.punch {
+.punch-in {
     color: darkorange;
     font-size: 25px;
     font-weight: 600;

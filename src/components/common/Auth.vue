@@ -56,10 +56,6 @@ import {ApiLogin,ApiRegister,ApiResetPassword} from '../../js/Api'
 export default {
   name: 'Auth',
   props: {
-    title: {
-      type: String,
-      default: "请登录"
-    },
     visible: {
       type: Boolean,
       default: false
@@ -91,9 +87,6 @@ export default {
     else this.currentCatalogueName = "3";
   },
   methods: {
-    updateTitle() {
-
-    },
     handleCancel () {
       this.$emit('update:visible', false);
     },
@@ -101,6 +94,7 @@ export default {
       const {account,password} = this.form;
       if(!password || !account) return this.$toast('请输入账号和密码');
       await ApiLogin(account,password);
+      // console.log(sessionStorage.getItem("user"));
       this.$emit('login');
       this.$emit('update:visible', false);
     },

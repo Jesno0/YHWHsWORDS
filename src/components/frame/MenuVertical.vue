@@ -4,31 +4,37 @@
         <i class="el-icon-menu"></i>
     </span>
     <div v-if="isShow">
-        <el-menu :default-active="$route.path" @select="handleHide" router="router">
-            <el-menu-item index="/">
-                <span slot="title"><i class="el-icon-s-home"/>首页</span>
-            </el-menu-item>
-            <el-menu-item index="/bible">
-                <span slot="title"><i class="el-icon-reading"/>圣经</span>
-            </el-menu-item>
-            <el-menu-item index="/tool">
-                <span slot="title"><i class="el-icon-s-goods"/>工具</span>
-            </el-menu-item>
-            <el-menu-item index="/mine">
-                <span slot="title"><i class="el-icon-user-solid"/>我的</span>
-            </el-menu-item>
+        <el-menu ref="menu" :default-active="$route.path" menu-trigger="click" @select="handleHide" @open="handleOpen" router>
+            <div v-for="rt in $router.options.routes" :key="rt.name">
+                <el-submenu v-if="rt.children && rt.children.length" :index="rt.path">
+                    <span slot="title"><i :class="rt.icon"/>{{rt.name}}</span>
+                    <el-menu-item v-for="srt in rt.children" :key="srt.name" :index="srt.path">
+                        <span slot="title"><i v-if="srt.icon" :class="srt.icon"/>{{srt.name}}</span>
+                    </el-menu-item>
+                </el-submenu>
+                <el-menu-item v-else :index="rt.path">
+                    <span slot="title"><i v-if="rt.icon" :class="rt.icon"/>{{rt.name}}</span>
+                </el-menu-item>
+            </div>
         </el-menu>
         <span class="mask" @click="handleHide"/>
     </div>
+    <Auth :visible.sync="isShowAuth"/>
 </div>
 </template>
 
 <script>
+import Auth from '../common/Auth'
+
 export default {
   name: 'MenuVertical',
+  components: {
+    Auth
+  },
   data () {
     return {
-      isShow: false
+      isShow: false,
+      isShowAuth: false
     }
   },
   methods: {
@@ -37,6 +43,17 @@ export default {
     },
     handleHide () {
       this.isShow = false
+    },
+    handleOpen (_index) {
+        switch(_index.replace(/^\//,'')) {
+            case 'mine':
+                if(!this.$session.get('user')) {
+                    this.$refs.menu.close(_index);
+                    this.isShow = false;
+                    this.isShowAuth = true;
+                }
+                break;
+        }
     }
   }
 }
@@ -55,15 +72,17 @@ export default {
     top: 0;
     right: 0;
     height: 100%;
-    width: 120px;
+    width: 150px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+.el-menu /deep/ .el-submenu__title,
 .el-menu-item {
     height: auto;
     color: #909399;
     font-size: 18px;
 }
-.el-menu-item:focus, .el-menu-item:hover {
+.el-menu-item:focus, 
+.el-menu-item:hover {
     color: #303133;
     background-color: #f9eecec7;
 }
@@ -72,6 +91,10 @@ export default {
     background-color: #f9eecec7;
     font-weight: 600;
 }
+.el-menu /deep/ .el-submenu .el-submenu__icon-arrow {
+    height: auto;
+}
+.el-menu /deep/ .el-submenu i,
 .el-menu-item i {
     height: 23px;
 }

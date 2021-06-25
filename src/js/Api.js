@@ -75,8 +75,9 @@ const ApiBiblePunchIn = async function () {
     return "";//TODO
 }
 
-const ApiLogin = async function (account,password) {
-    return "";//TODO ：1.接口，2. 写入session
+const ApiLogin = async function (loginName,password) {
+    const data = await post('/doLogin',{loginName,password});
+    return data;//TODO ：1.接口，2. 写入session
 }
 
 const ApiLogout = async function () {
@@ -91,41 +92,70 @@ const ApiResetPassword = async function (account,email) {
     return "";//TODO
 }
 
+const ApiCheckPassword = async function (pwd) {
+    return post('/user/checkOldPwd',{pwd});
+}
+
+const ApiEditProfile = async function ({
+    loginName,
+    nickName,
+    email,
+    phone,
+    oldPassword,
+    newPassword,
+    editIp,
+    editAddr,
+    avatar
+}) {
+    return post('/user/editAccount',{
+        loginName,
+        nickName,
+        regEmail: email,
+        regPhone: phone,
+        oldLoginPwd: oldPassword,
+        loginPwd: newPassword,
+        twoLoginPwd: newPassword,
+        editIp,
+        editAddr,
+        file: avatar
+    });
+}
+
 const ApiUserData = async function () {
-    // const data = await post('/user/loadData');
-    const data = {
-        "dakaTime": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-        ],
-        "yiduOfAll": [
-            0, 1189
-        ],
-        "dakaDate": [
-            "6-18",
-            "6-19",
-            "6-20",
-            "6-21",
-            "6-22",
-            "6-23",
-            "6-24"
-        ],
-        "yiduzhanbi": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-        ]
-    };
+    let data = await post('/user/loadData');
+    // data = {
+    //     "dakaTime": [
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0
+    //     ],
+    //     "yiduOfAll": [
+    //         0, 1189
+    //     ],
+    //     "dakaDate": [
+    //         "6-18",
+    //         "6-19",
+    //         "6-20",
+    //         "6-21",
+    //         "6-22",
+    //         "6-23",
+    //         "6-24"
+    //     ],
+    //     "yiduzhanbi": [
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0,
+    //         0.0
+    //     ]
+    // };
 
     return data;
 }
@@ -166,6 +196,7 @@ function request (method, url, data, params, not_form) {
         if (result.status !== 200) return alert(result);
         result = result.data;
         if (result.constructor !== Object) return result;
+        if(isNaN(result.ok)) return result;
         if (result.ok !== 0) {
             alert(JSON.parse(result));
             return Promise.reject(result);
@@ -180,11 +211,13 @@ export {
     ApiLogout,//退出
     ApiRegister,//注册
     ApiResetPassword,//修改密码
+    ApiCheckPassword,//验证密码
+    ApiEditProfile,//修改个人信息
     ApiBannar,//首页走马灯：目前写死
     ApiBibleVersion,//圣经版本
     ApiBibleBookType,//圣经新/旧约（写死）
     ApiBibleBook,//圣经书卷
     ApiBibleWord,//圣经每章经文
-    ApiBiblePunchIn,//圣经每章经文
-    ApiUserData//用户数据
+    ApiBiblePunchIn,//圣经打卡
+    ApiUserData//用户统计数据
 }

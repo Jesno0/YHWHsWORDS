@@ -45,7 +45,7 @@ export default {
     return {
       isPreviousShow: false,
       isNextShow: true,
-      isAuthShow: true,
+      isAuthShow: false,
       chapterId_v: 1
     }
   },

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>待开发</h1>
-  </div>
+  <router-view/>
 </template>
 
 <script>
@@ -15,5 +13,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

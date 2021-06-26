@@ -7,7 +7,7 @@
 ``` bash
 # download project from git
 git clone https://gitee.com/jaimly/YHWHsWORDS.git
-or git clone https://github.com/jaimly/YHWHsWORDS.git
+or git clone https://github.com/Jesno0/YHWHsWORDS.git
 
 # install dependencies
 npm i

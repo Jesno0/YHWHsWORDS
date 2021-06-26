@@ -1,8 +1,8 @@
 <template>
-  <el-form :model="form" :rules="rules" ref="form">
-    <el-form-item label="登录名" prop="loginName">
+  <el-form :model="form" :rules="rules" ref="form" label-width="110px">
+    <el-form-item label="头像" prop="avatar">
         <el-upload :action="handleUploadAvatar" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="handleBeforeUploadAvatar">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="imageUrl" :src="form.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
     </el-form-item>
@@ -12,7 +12,7 @@
     <el-form-item label="昵称" prop="nicName">
         <el-input v-model="form.nicName" placeholder="请输入昵称"></el-input>
     </el-form-item>
-    <el-form-item label="要统计打卡的群组" prop="punchInGroup">
+    <el-form-item label="打卡群组" prop="punchInGroup">
         <el-select v-model="form.punchInGroup" placeholder="请选择群组">
           <el-option label="群组一" value="1"></el-option>
           <el-option label="群组二" value="2"></el-option>
@@ -24,13 +24,13 @@
     <el-form-item label="电话号码" prop="phone">
         <el-input v-model="form.phone"></el-input>
     </el-form-item>
-    <el-form-item label="原登录密码" prop="phone">
+    <el-form-item label="原密码" prop="phone">
         <el-input v-model="form.phone"></el-input>
     </el-form-item>
-    <el-form-item label="新登录密码" prop="phone">
+    <el-form-item label="新密码" prop="phone">
         <el-input v-model="form.phone"></el-input>
     </el-form-item>
-    <el-form-item label="再输一次新登录密码" prop="phone">
+    <el-form-item label="确认新密码" prop="phone">
         <el-input v-model="form.phone"></el-input>
     </el-form-item>
     <el-form-item>
@@ -45,7 +45,7 @@ import {ApiCheckPassword,ApiEditProfile} from '../../js/Api'
 
 export default {
   name: 'Profile',
-  data () {
+  data() {
     return {
       form: {
           avatar: "",
@@ -54,9 +54,9 @@ export default {
           email: "",
           phone: "",
           punchInGroup: "",
-          oldPassword,
-          newPassword,
-          confirmPassword
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: ""
       },
       rules: {
           loginName: [
@@ -79,7 +79,7 @@ export default {
           newPassword: [
             {pattern: /^[a-zA-Z]\w{5,17}$/, message: '密码要以字母开头至少6位的字符', trigger: 'blur'}
           ]
-        }
+        }   
     }
   },
   async mounted () {
@@ -108,11 +108,31 @@ export default {
       },
       handleUploadAvatar(e) {
           console.log(e);
+      },
+      handleAvatarSuccess(e) {
+
       }
   }
 }
 </script>
 
 <style scoped>
-
+.el-form {
+  margin-right: 10px;
+}
+.el-form-item {
+  margin-bottom: 5px;
+}
+.el-form-item /deep/ .el-input,
+.el-form-item /deep/ .el-form-item__content {
+  font-size: 18px;
+}
+.el-form-item /deep/ .el-form-item__label {
+  font-size: 18px;
+}
+</style>
+<style>
+.el-select-dropdown /deep/ .el-select-dropdown__item {
+  font-size: 18px;
+}
 </style>

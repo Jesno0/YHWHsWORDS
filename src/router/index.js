@@ -11,7 +11,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/index',
+      path: '/',
       name: '首页',
       icon: "el-icon-s-home",
       component: Index

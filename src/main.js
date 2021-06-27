@@ -5,7 +5,7 @@ import VueSession from 'vue-session'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
-import router from './router'
+import Router from './js/Router'
 import Toast from './js/Toast'
 // import Api from './js/Api'
 
@@ -18,7 +18,7 @@ Vue.use(Toast)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router: Router,
   components: { App },
   template: '<App/>'
 })

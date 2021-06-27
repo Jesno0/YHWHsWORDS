@@ -1,6 +1,6 @@
 <template>
   <el-radio-group :ref="$ref" v-model="currentName">
-      <el-radio-button v-for="item in list" :key="item.id" :label="item.name" @click.native="handleSelect"></el-radio-button>
+      <el-radio-button v-for="item in list" :key="item.id" :label="item.shortName || item.name" @click.native="handleSelect"></el-radio-button>
   </el-radio-group>
 </template>
 

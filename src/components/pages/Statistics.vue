@@ -1,10 +1,12 @@
 <template>
-  <router-view/>
+  <div>
+    <h1>待开发</h1>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Tool',
+  name: 'Statistics',
   data () {
     return {
     }
@@ -13,4 +15,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

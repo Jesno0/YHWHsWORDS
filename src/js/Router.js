@@ -5,6 +5,9 @@ import Bible from '@/components/pages/Bible'
 import Tool from '@/components/pages/Tool'
 import Mine from '@/components/pages/Mine'
 import Profile from '@/components/pages/Profile'
+import Statistics from '@/components/pages/Statistics'
+import Software from '@/components/pages/Software'
+import Reference from '@/components/pages/Reference'
 
 Vue.use(Router)
 
@@ -26,7 +29,16 @@ export default new Router({
       path: '/tool',
       name: '工具',
       icon: "el-icon-s-goods",
-      component: Tool
+      component: Tool,
+      children: [{
+        path: '/tool/software',
+        name: '工具软件',
+        component: Software
+      },{
+        path: '/tool/reference',
+        name: '参考资料',
+        component: Reference
+      }]
     },
     {
       path: '/mine',
@@ -40,7 +52,7 @@ export default new Router({
       },{
         path: '/mine/statistics',
         name: '打卡统计',
-        component: Index
+        component: Statistics
       }]
     }
   ]

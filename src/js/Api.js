@@ -33,9 +33,8 @@ const ApiBannar = async function () {
 };
 const ApiBibleVersion = function () {
     return [{
-        id: "1",
-        name: "新标点和合本",
-        shortName: "和合本"
+        id: 1,
+        name: "新标点和合本"
     }]
 };
 const ApiBibleBookType = function () {
@@ -160,6 +159,30 @@ const ApiUserData = async function () {
     return data;
 }
 
+const ApiReferenceList = async function () {
+    // let back = await post();
+    let back = [{
+        id: 1,
+        name: "新约地图",
+        cover: "",
+        description: "新约圣地相关高清地图",
+        path: ""
+    }];
+    return back;
+}
+
+const ApiSoftwareList = async function () {
+    // let back = await post();
+    let back = [{
+        id: 1,
+        name: "多版本圣经",
+        cover: "",
+        description: "结合多版本查看圣经",
+        path: ""
+    }];
+    return back;
+}
+
 function post(url,data,params,not_form) {
     return request("post",url,data,params,not_form);
 }
@@ -202,6 +225,8 @@ function request (method, url, data, params, not_form) {
             return Promise.reject(result);
         }
         return result.data;
+    }).catch(err => {
+        alert(err);
     })
 }
 
@@ -219,5 +244,7 @@ export {
     ApiBibleBook,//圣经书卷
     ApiBibleWord,//圣经每章经文
     ApiBiblePunchIn,//圣经打卡
-    ApiUserData//用户统计数据
+    ApiUserData,//用户统计数据
+    ApiReferenceList,//参考资料列表
+    ApiSoftwareList//工具软件列表
 }

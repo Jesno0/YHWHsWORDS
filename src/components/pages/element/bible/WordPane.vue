@@ -3,7 +3,8 @@
         <Word class="word" :bookId="bookId" :chapterId="chapterId_v"/>
         <div class="footer">
             <el-button type="primary" icon="el-icon-arrow-left" circle :disabled="!isPreviousShow" @click="handlePrevious"></el-button>
-            <el-button type="text" class="punch-in" @click="handlePunchIn">打卡</el-button>
+            <span v-if="isPunchIn">已打卡</span>
+            <el-button v-else type="text" class="punch-in" @click="handlePunchIn">打卡</el-button>
             <el-button type="primary" icon="el-icon-arrow-right" circle :disabled="!isNextShow" @click="handleNext"></el-button>
         </div>
         <Auth :visible.sync="isAuthShow"/>
@@ -13,7 +14,7 @@
 <script>
 import Word from './Word'
 import Auth from '../../../common/Auth'
-import {ApiBiblePunchIn} from '../../../../js/Api'
+import {ApiUserPunchIn,ApiCheckLogin} from '@/js/Api'
 
 export default {
   name: 'WordPane',
@@ -46,11 +47,13 @@ export default {
       isPreviousShow: false,
       isNextShow: true,
       isAuthShow: false,
+      isPunchIn: false,
       chapterId_v: 1
     }
   },
   async mounted () {
       this.updateArrow(this.chapterId);
+      this.isPunchIn = false;//await Api(); //打卡信息
   },
   methods: {
     updateArrow () {
@@ -64,14 +67,14 @@ export default {
         this.updateArrow(++this.chapterId_v);
     },
     async handlePunchIn () {
-        if(!this.$session.get("user")) {
-            this.$toast("请先登录");
+        if(!(await ApiCheckLogin())) {
+            this.$message.error("请先登录");
             this.isAuthShow = true;
+        } else {
+            await ApiUserPunchIn(this.bookId,this.chapterId_v);
+            this.$message.success("打卡成功！");
+            this.isPunchIn = true;
         }
-    },
-    async submitPunchIn () {
-        await ApiBiblePunchIn();
-        //TODO: 打卡后界面的变动
     }
   }
 }

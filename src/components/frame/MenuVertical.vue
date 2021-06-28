@@ -25,6 +25,7 @@
 
 <script>
 import Auth from '../common/Auth'
+import {ApiCheckLogin} from '@/js/Api'
 
 export default {
   name: 'MenuVertical',
@@ -44,10 +45,10 @@ export default {
     handleHide () {
       this.isShow = false
     },
-    handleOpen (_index) {
+    async handleOpen (_index) {
         switch(_index.replace(/^\//,'')) {
             case 'mine':
-                if(!this.$session.get('user')) {
+                if(!(await ApiCheckLogin())) {
                     this.$refs.menu.close(_index);
                     this.isShow = false;
                     this.isShowAuth = true;

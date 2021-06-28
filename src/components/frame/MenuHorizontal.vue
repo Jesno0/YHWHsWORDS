@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-menu ref="menu" :default-active="$route.path" mode="horizontal" menu-trigger="click" @open="handleOpen" router>
+  <el-menu ref="menu" :default-active="$route.path" mode="horizontal" menu-trigger="click" @open="handleOpen" :unique-opened="true" router>
       <div v-for="rt in $router.options.routes" :key="rt.name">
         <el-submenu v-if="rt.children && rt.children.length" :index="rt.path" router>
             <span slot="title"><i :class="rt.icon"/>{{rt.name}}</span>
@@ -19,6 +19,7 @@
 
 <script>
 import Auth from '../common/Auth'
+import {ApiCheckLogin} from '@/js/Api'
 
 export default {
   name: 'MenuHorizontal',
@@ -31,10 +32,10 @@ export default {
     }
   },
   methods: {
-    handleOpen (_index) {
+    async handleOpen (_index) {
         switch(_index.replace(/^\//,'')) {
             case 'mine':
-                if(!this.$session.get('user')) {
+                if(!(await ApiCheckLogin())) {
                     this.isShowAuth = true;
                     this.$refs.menu.close(_index);
                 }
@@ -99,5 +100,10 @@ export default {
 .el-menu--popup .el-menu-item {
     border: solid 1px #e6e6e6;
     padding: 5px;
+}
+.el-menu--popup .el-menu-item.is-active, 
+.el-menu--popup .el-menu-item:not(.is-disabled):focus, 
+.el-menu--popup .el-menu-item:not(.is-disabled):hover {
+    background: blanchedalmond;
 }
 </style>

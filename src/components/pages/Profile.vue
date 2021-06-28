@@ -92,15 +92,15 @@ export default {
             const {oldPassword, newPassword, confirmPassword} = this.form;
             if(oldPassword) {
                 const isCheck = await ApiCheckPassword(this.form.oldPassword);
-                if(!isCheck) return this.$toast("原登录密码不正确");
+                if(!isCheck) return this.$message.error("原登录密码不正确");
             }
             if(newPassword || confirmPassword) {
-                if(!oldPassword) return this.$toast("请输入原登录密码");
-                if(newPassword !== confirmPassword) return this.$toast("两次密码不正确");
+                if(!oldPassword) return this.$message.error("请输入原登录密码");
+                if(newPassword !== confirmPassword) return this.$message.error("两次密码不正确");
             }
 
             await ApiEditProfile(this.form);
-            this.$toast("修改成功！");
+            this.$message.success("修改成功！");
         });
       },
       resetForm(formName) {

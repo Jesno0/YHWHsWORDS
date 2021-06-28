@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {ApiLogin,ApiRegister,ApiResetPassword} from '../../js/Api'
+import {ApiLogin,ApiRegister,ApiResetPassword,ApiCheckLogin} from '@/js/Api'
 
 export default {
   name: 'Auth',
@@ -82,7 +82,7 @@ export default {
     }
   },
   async mounted () {
-    const isLogin = false;
+    const isLogin = await ApiCheckLogin();
     if(!isLogin) this.currentCatalogueName = "1";
     else this.currentCatalogueName = "3";
   },
@@ -92,25 +92,27 @@ export default {
     },
     async handleLogin () {
       const {account,password} = this.form;
-      if(!password || !account) return this.$toast('请输入账号和密码');
-      await ApiLogin(account,password);
-      // console.log(sessionStorage.getItem("user"));
+      if(!password || !account) return this.$message.error('请输入账号和密码');
+      const user = await ApiLogin(account,password);
+      // this.$session.set("user",user);
+      // console.log(this.$session.get("user"));
+
       this.$emit('login');
       this.$emit('update:visible', false);
     },
     async handleRegister () {
       
       const {account,password,passwordConfirm} = this.form;
-      if(!account || !password || (password != passwordConfirm)) return this.$toast('请输入账号和相同密码');
+      if(!account || !password || (password != passwordConfirm)) return this.$message.error('请输入账号和相同密码');
       await ApiRegister(account,password);
       this.form.password = "";
       this.form.passwordConfirm = "";
-      await this.$toast("注册成功,请登录");
+      await this.$message.success("注册成功,请登录");
       this.currentCatalogueName = "1";
     },
     async handleResetPassword () {
       const {account,email} = this.form;
-      if(!account || !email) return this.$toast('请输入账号和邮箱');
+      if(!account || !email) return this.$message.error('请输入账号和邮箱');
       await ApiResetPassword(account,email);
     }
   }

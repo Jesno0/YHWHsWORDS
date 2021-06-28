@@ -63,7 +63,7 @@ export default {
     async updateBooks (_bookTypeIndex=1) {
       this.books = await ApiBibleBook(this.bookTypes[_bookTypeIndex].id);
       this.currentBookIndex = 0;
-      this.currentBookName = this.books[0].name;
+      this.currentBookName = this.books[0].shortName || this.books[0].name;
       this.updateChapters();
     },
     updateChapters (_bookIndex=0) {
@@ -82,7 +82,7 @@ export default {
           break;
         case '$book':
           this.currentBookIndex = _index;
-          this.currentBookName = this.books[_index].name;
+          this.currentBookName = this.books[_index].shortName || this.books[_index].name;
           this.updateChapters(_index);
           break;
         case '$chapter':

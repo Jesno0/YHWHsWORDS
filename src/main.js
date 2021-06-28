@@ -6,13 +6,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import Router from './js/Router'
-import Toast from './js/Toast'
 // import Api from './js/Api'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueSession)
-Vue.use(Toast)
 // Vue.use(Api)
 
 /* eslint-disable no-new */

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {ApiBibleWord} from '../../../../js/Api'
+import {ApiBibleWord} from '@/js/Api'
 
 export default {
   name: 'Word',

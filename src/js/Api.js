@@ -6,10 +6,10 @@
 
 import Axios from 'axios';
 
-const host = "/api";
-// const host = "http://3g8oacl.nat.ipyingshe.com";//build_test
-// const host = "";//build
-
+const HOST = "/api";
+// const HOST = "http://3g8oacl.nat.ipyingshe.com";//build_test
+// const HOST = "";//build
+const IsAlert = Boolean(HOST != "/api");
 
 let Vue;
 const install = function (_Vue) {
@@ -143,23 +143,23 @@ const ApiUserAsk = async function (bookId, charpterNo, question, whoCanRead=0) {
 }
 
 const ApiUserQuestion = async function (bookId, charpterNo) {
-    // return {
-    //     "myQues": [
-    //         {
-    //             "bookNo": 40,
-    //             "question": "1.测试数据：只有我能看",
-    //             "charpterNo": 1,
-    //             "nickName": "Jesn",
-    //             "whoCanRead": 0,
-    //             "id": 78,
-    //             "quesDate": "2021-06-28 13:32:07.0",
-    //             "bookName": "太:1章",
-    //             "userId": "7fae1a86-ce43-11eb-81c5-14dae960ab41"
-    //         }
-    //     ],
-    //     "pubQues": [],
-    //     "groupQues": []
-    // };
+    return {
+        "myQues": [
+            {
+                "bookNo": 40,
+                "question": "1.测试数据：只有我能看",
+                "charpterNo": 1,
+                "nickName": "Jesn",
+                "whoCanRead": 0,
+                "id": 78,
+                "quesDate": "2021-06-28 13:32:07.0",
+                "bookName": "太:1章",
+                "userId": "7fae1a86-ce43-11eb-81c5-14dae960ab41"
+            }
+        ],
+        "pubQues": [],
+        "groupQues": []
+    };
     return await post('/user/getQuesByReader', {
         bookId, 
         charpterNo
@@ -253,7 +253,7 @@ function get(url,params,not_form) {
 function request (method, url, data, params, not_form) {
     const opts = {
         method,
-        url: `${host}${url}`,
+        url: `${HOST}${url}`,
         params,
         data
     };
@@ -274,18 +274,25 @@ function request (method, url, data, params, not_form) {
         };
     }
     return Axios(opts).then(function (result) {
-        if ((result.status >= 500) && (result.status <= 600)) return alert('服务器错误，可稍候再试');
-        if (result.status !== 200) return alert(result);
+        if ((result.status >= 500) && (result.status <= 600)) {
+            if(IsAlert) alert('服务器错误，可稍候再试');
+            return;
+        }
+        if (result.status !== 200) {
+            if(IsAlert) alert(result);
+            return;
+        }
+
         result = result.data;
         if (!result || result.constructor !== Object) return result;
         if(isNaN(result.ok)) return result;
         if (result.ok !== 0) {
-            alert(JSON.parse(result));
+            if(IsAlert) alert(JSON.parse(result));
             return Promise.reject(result);
         }
         return result.data;
     }).catch(err => {
-        alert(err);
+        if(IsAlert) alert(err);
     })
 }
 

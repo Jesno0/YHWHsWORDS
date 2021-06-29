@@ -1,4 +1,5 @@
 <template>
+<!-- TODO: Cascader  -->
   <el-tabs v-model="currentCatalogueName" type="card">
     <el-tab-pane :label="currentVersionName" name="1" disabled></el-tab-pane>
     <el-tab-pane label=">" name="1-1" disabled></el-tab-pane>
@@ -21,19 +22,26 @@
     <el-tab-pane label="经文" name="5">
       <WordPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length"/>
     </el-tab-pane>
+    <el-tab-pane label="|" name="5-1" disabled></el-tab-pane>
+
+    <el-tab-pane label="交流" name="6">
+      <CommunicationPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id"/>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
 import {ApiBibleVersion,ApiBibleBookType,ApiBibleBook,ApiBibleWord} from '../../js/Api'
-import WordPane from './element/bible/WordPane'
 import TabRadio from './element/bible/TabRadio'
+import WordPane from './element/bible/WordPane'
+import CommunicationPane from './element/bible/CommunicationPane'
 
 export default {
   name: 'Bible',
   components: {
     WordPane,
-    TabRadio
+    TabRadio,
+    CommunicationPane
   },
   data () {
     return {

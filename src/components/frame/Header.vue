@@ -27,7 +27,6 @@ export default {
     const _this = this
     window.onresize = () => {
       _this.isMenuVertical = document.body.clientWidth < 600
-      // window.orientation, // 判断横竖屏
     }
   }
 }

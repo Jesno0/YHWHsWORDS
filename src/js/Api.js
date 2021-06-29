@@ -167,40 +167,51 @@ const ApiUserQuestion = async function (bookId, charpterNo) {
 }
 
 const ApiUserData = async function () {
-    let data = await post('/user/loadData');
-    // data = {
-    //     "dakaTime": [
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0
-    //     ],
-    //     "yiduOfAll": [
-    //         0, 1189
-    //     ],
-    //     "dakaDate": [
-    //         "6-18",
-    //         "6-19",
-    //         "6-20",
-    //         "6-21",
-    //         "6-22",
-    //         "6-23",
-    //         "6-24"
-    //     ],
-    //     "yiduzhanbi": [
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0,
-    //         0.0
-    //     ]
-    // };
+    // let data = await post('/user/loadData');
+    let data = {
+        "dakaTime": [
+            0.0,
+            0.0,
+            10,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "yiduOfAll": [
+            100, 1189
+        ],
+        "dakaDate": [
+            "6-28",
+            "6-29",
+            "6-30",
+            "7-1",
+            "7-2",
+            "7-3",
+            "7-4"
+        ],
+        "yiduzhanbi": [
+            0.0,
+            0.1,
+            0.0,
+            0.5,
+            0.0,
+            0.0,
+            0.8,
+            0.0
+        ]
+    };
+
+    data.sorts = data.sort || [
+        "律法书",
+        "诗歌智慧书",
+        "大小先知书",
+        "四福音书",
+        "教会历史",
+        "保罗书信",
+        "其他书信",
+        "启示录"
+    ];
 
     return data;
 }

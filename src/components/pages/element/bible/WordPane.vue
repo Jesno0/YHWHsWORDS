@@ -1,11 +1,11 @@
 <template>
     <div>
-        <Word class="word" :bookId="bookId" :chapterId="chapterId_v"/>
+        <Word class="word" :list="wordList" :bookId="bookId" :chapterId="chapterId"/>
         <div class="footer">
             <el-button type="primary" icon="el-icon-arrow-left" circle :disabled="!isPreviousShow" @click="handlePrevious"></el-button>
             <span v-if="isPunchIn">
                 <h3>已打卡</h3>
-                <span>2021年6月30日 13:13:13</span>
+                <span>{{punchInTime}}</span>
             </span>
             <el-button v-else type="text" class="punch-in" @click="handlePunchIn">打卡</el-button>
             <el-button type="primary" icon="el-icon-arrow-right" circle :disabled="!isNextShow" @click="handleNext"></el-button>
@@ -17,7 +17,7 @@
 <script>
 import Word from './Word'
 import Auth from '../../../common/Auth'
-import {ApiUserPunchIn,ApiCheckLogin} from '@/js/Api'
+import {ApiUserPunchIn,ApiCheckLogin,ApiBibleWord} from '@/js/Api'
 
 export default {
   name: 'WordPane',
@@ -37,12 +37,13 @@ export default {
     }
   },
   watch: {
-    chapterId(newV) {
-        this.chapterId_v = newV;
+    chapterId() {
         this.updateArrow();
+        this.updateWordList();
     },
     chapterCount() {
         this.updateArrow();
+        this.updateWordList();
     }
   },
   data () {
@@ -51,30 +52,39 @@ export default {
       isNextShow: true,
       isAuthShow: false,
       isPunchIn: false,
-      chapterId_v: 1
+      wordList: [],
+      punchInTime: ""
     }
   },
   async mounted () {
       this.updateArrow(this.chapterId);
-      this.isPunchIn = false;//await Api(); //打卡信息
+      this.updateWordList();
   },
   methods: {
     updateArrow () {
-        this.isPreviousShow = this.chapterId_v > 1;
-        this.isNextShow = this.chapterId_v < this.chapterCount;
+        this.isPreviousShow = this.chapterId > 1;
+        this.isNextShow = this.chapterId < this.chapterCount;
+    },
+    async updateWordList () {
+        if(!this.bookId || !this.chapterId) return;
+        const {userInfo,list:_list} = await ApiBibleWord(this.bookId, this.chapterId);
+
+        this.wordList = _list;
+        this.isPunchIn = Boolean(userInfo);
+        this.punchInTime = userInfo ? userInfo.maxTime : "";
     },
     handlePrevious () {
-        this.updateArrow(--this.chapterId_v);
+        this.$emit("chapterChange",this.chapterId-2);
     },
     handleNext () {
-        this.updateArrow(++this.chapterId_v);
+        this.$emit("chapterChange",this.chapterId);
     },
     async handlePunchIn () {
         if(!(await ApiCheckLogin())) {
             this.$message.error("请先登录");
             this.isAuthShow = true;
         } else {
-            await ApiUserPunchIn(this.bookId,this.chapterId_v);
+            await ApiUserPunchIn(this.bookId,this.chapterId);
             this.$message.success("打卡成功！");
             this.isPunchIn = true;
         }

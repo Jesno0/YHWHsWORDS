@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // target: 'http://t3p4d9j.nat.ipyingshe.com',
-        target: 'http://3g8oacl.nat.ipyingshe.com',
+        target: 'http://t3p4d9j.nat.ipyingshe.com',//服务器
+        // target: 'http://3g8oacl.nat.ipyingshe.com',//公开
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

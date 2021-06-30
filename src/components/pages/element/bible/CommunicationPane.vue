@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import {ApiUserQuestion,ApiUserAsk} from '@/js/Api'
+import {ApiUserQuestion} from '@/js/Api'
 import Communication from './Communication'
 
 export default {
@@ -43,10 +43,10 @@ export default {
   },
   methods: {
     async updateList () {
-        const {myQues,groupQues,pubQues} = await ApiUserQuestion(this.bookId,this.chapterId);
-        this.myQues = myQues;
-        this.groupQues = groupQues;
-        this.pubQues = pubQues;
+      const {myQues,groupQues,pubQues} = await ApiUserQuestion(this.bookId,this.chapterId);
+      this.myQues = myQues;
+      this.groupQues = groupQues;
+      this.pubQues = pubQues;
     }
   }
 }

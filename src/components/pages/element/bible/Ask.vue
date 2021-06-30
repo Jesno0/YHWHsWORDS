@@ -21,6 +21,12 @@ export default {
     index: {
       type: String,
       default: "1"
+    },
+    bookId: {
+        type: Number
+    },
+    chapterId: {
+        type: Number
     }
   },
   watch: {
@@ -49,7 +55,7 @@ export default {
       this.$emit('update:visible', false);
     },
     async handleSubmit () {
-        await ApiUserAsk(this.bookId,this.chapterId,this.question,parseInt(this.index));
+        await ApiUserAsk(this.bookId,this.chapterId,this.question,parseInt(this.index)-1);
         this.question = "";
         this.$emit('submit');
         this.$emit('update:visible', false);

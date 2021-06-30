@@ -1,6 +1,8 @@
 <template>
   <el-tabs v-model="currentCatalogueName" type="card">
-    <el-tab-pane :label="currentVersionName" name="1" disabled></el-tab-pane>
+    <el-tab-pane :label="currentVersionName" name="1" :disabled="versions.length<2">
+      <TabRadio $ref="$version" :list="versions" :index="currentVersionIndex" v-on:select="handleTabSelect"/>
+    </el-tab-pane>
     <el-tab-pane label=">" name="1-1" disabled></el-tab-pane>
 
     <el-tab-pane :label="currentBookTypeName" name="2">
@@ -19,7 +21,7 @@
     <el-tab-pane label=">" name="4-1" disabled></el-tab-pane>
     
     <el-tab-pane label="经文" name="5">
-      <WordPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length"/>
+      <WordPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length" @chapterChange="updateCurrentChapter"/>
     </el-tab-pane>
     <el-tab-pane label="|" name="5-1" disabled></el-tab-pane>
 
@@ -30,7 +32,7 @@
 </template>
 
 <script>
-import {ApiBibleVersion,ApiBibleBookType,ApiBibleBook,ApiBibleWord} from '../../js/Api'
+import {ApiBibleVersion,ApiBibleBookType,ApiBibleBook} from '../../js/Api'
 import TabRadio from './element/bible/TabRadio'
 import WordPane from './element/bible/WordPane'
 import CommunicationPane from './element/bible/CommunicationPane'
@@ -61,22 +63,27 @@ export default {
   },
   async mounted () {
     this.versions = await ApiBibleVersion();
-    this.currentVersionName = this.versions[0].name;
+    this.currentVersionName = this.versions[0].shortName || this.versions[0].name;
     this.bookTypes = await ApiBibleBookType();
     this.currentBookTypeName = this.bookTypes[1].name;
     await this.updateBooks();
   },
   methods: {
     async updateBooks (_bookTypeIndex=1) {
-      this.books = await ApiBibleBook(this.bookTypes[_bookTypeIndex].id);
-      this.currentBookIndex = 0;
-      this.currentBookName = this.books[0].shortName || this.books[0].name;
-      this.updateChapters();
+      const {list:_list,userInfo} = await ApiBibleBook(this.bookTypes[_bookTypeIndex].id);
+      this.books = _list;
+      const userIndex = userInfo && _list.findIndex(x=>x.id == userInfo.bookId);
+      this.currentBookIndex = Math.max(userIndex , 0);
+      this.currentBookName = this.books[this.currentBookIndex].shortName || this.books[this.currentBookIndex].name;
+      this.updateChapters(userIndex > -1 ? userInfo.charpterNo : 0);
     },
-    updateChapters (_bookIndex=0) {
-      this.chapters = toChapter(this.books[_bookIndex].chapterCount);
-      this.currentChapterIndex = 0;
-      this.currentChapterName = this.chapters[0].name;
+    updateChapters (_chapterIndex=0) {
+      this.chapters = toChapter(this.books[this.currentBookIndex].chapterCount);
+      this.updateCurrentChapter(_chapterIndex);
+    },
+    updateCurrentChapter(_index) {
+      this.currentChapterIndex = _index;
+      this.currentChapterName = this.chapters[_index].name;
     },
     async handleTabSelect (e) {
       const tabIndex = parseInt(this.currentCatalogueName);
@@ -90,7 +97,7 @@ export default {
         case '$book':
           this.currentBookIndex = _index;
           this.currentBookName = this.books[_index].shortName || this.books[_index].name;
-          this.updateChapters(_index);
+          this.updateChapters();
           break;
         case '$chapter':
           this.currentChapterIndex = _index;
@@ -106,7 +113,7 @@ function toChapter(num) {
   return new Array(num).fill('').map((v,i) => {
     return {
       id: i+1,
-      name: `第${i+1}章`
+      name: `${i+1}章`
     };
   });
 }

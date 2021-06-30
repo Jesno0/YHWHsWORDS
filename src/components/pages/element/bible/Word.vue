@@ -18,34 +18,19 @@ import {ApiBibleWord} from '@/js/Api'
 export default {
   name: 'Word',
   props: {
-    bookId: {
-        type: Number
-    },
-    chapterId: {
-        type: Number
+    list: {
+        type: Array
     }
   },
   data () {
     return {
-      list: []
     }
   },
   watch: {
-    bookId (oldV, newV) {
-        this.updateList();
-    },
-    chapterId (oldV, newV) {
-        this.updateList();
-    }
   },
   async mounted () {
-    this.updateList();
   },
   methods: {
-    async updateList () {
-        if(!this.bookId || !this.chapterId) return;
-        this.list = await ApiBibleWord(this.bookId, this.chapterId);
-    },
     rowClassName ({row, rowIndex}) {
         return "row-all";
     },
@@ -53,10 +38,9 @@ export default {
         switch(columnIndex) {
             case 0:
                 return 'cell-num';
-            case 1:
-                return 'cell-word';
             case 2:
                 return 'cell-operation';
+            case 1:
             default:
                 return 'cell-word';
         }
@@ -90,7 +74,9 @@ export default {
 }
 </style>
 <style>
-.el-table .cell-num, .el-table .cell-word, .el-table .cell-operation {
+.el-table .cell-num, 
+.el-table .cell-word, 
+.el-table .cell-operation {
     padding: 1px 0;
 }
 .el-table .cell-word {

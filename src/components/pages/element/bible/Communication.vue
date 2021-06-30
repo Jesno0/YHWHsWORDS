@@ -14,7 +14,7 @@
             </el-collapse-item>
         </el-collapse>
     </el-collapse-item>
-    <Ask :visible.sync="isShowAsk" :index="name" @submit="handleAskSubmit"/>
+    <Ask :visible.sync="isShowAsk" :index="name" :bookId="bookId" :chapterId="chapterId" @submit="handleAskSubmit"/>
 </div>
 </template>
 

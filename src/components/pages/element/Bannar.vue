@@ -3,7 +3,7 @@
   <el-carousel trigger="click" height="200px">
     <el-carousel-item v-for="item in list" :key="item.title">
       <h1>{{ item.title }}</h1>
-      <p>{{ item.content }}</p>
+      <span>{{ item.content }}</span>
     </el-carousel-item>
   </el-carousel>
 </div>
@@ -28,12 +28,12 @@ export default {
 <style scoped>
 #bannar {
   background-color: blanchedalmond;
-  padding: 0 20px;
+  padding: 0 5%;
 }
 h1 {
   color: #bb8033;
 }
-p {
+span {
   color: #716f6c;
   font-size: 18px;
 }

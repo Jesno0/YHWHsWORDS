@@ -8,7 +8,8 @@ import Axios from 'axios';
 
 const HOST = "/api";
 // const HOST = "http://3g8oacl.nat.ipyingshe.com";//build_test
-// const HOST = "";//build
+// const HOST = "http://localhost:8080/api";//build_test
+// const HOST = "";//build_prod
 const IsAlert = Boolean(HOST != "/api");
 
 let Vue;
@@ -92,6 +93,7 @@ const ApiCheckPassword = async function (pwd) {
 }
 
 const ApiCheckLogin = async function () {
+    // return true;
     return get('/isLogin.do');
 }
 
@@ -145,6 +147,17 @@ const ApiUserAsk = async function (bookId, charpterNo, question, whoCanRead=0) {
 const ApiUserQuestion = async function (bookId, charpterNo) {
     return {
         "myQues": [
+            {
+                "bookNo": 40,
+                "question": "1.测试数据：只有我能看",
+                "charpterNo": 1,
+                "nickName": "Jesn",
+                "whoCanRead": 0,
+                "id": 78,
+                "quesDate": "2021-06-28 13:32:07.0",
+                "bookName": "太:1章",
+                "userId": "7fae1a86-ce43-11eb-81c5-14dae960ab41"
+            },
             {
                 "bookNo": 40,
                 "question": "1.测试数据：只有我能看",
@@ -235,7 +248,7 @@ const ApiSoftwareList = async function () {
         id: 1,
         name: "多版本圣经",
         cover: "http://3g8oacl.nat.ipyingshe.com/images/bibleSoft.png",
-        description: "结合多版本查看圣经,结合多版本查看圣经,结合多版本查看圣经",
+        description: "结合多版本查看圣经",
         pathName: "下载",
         path: "http://3g8oacl.nat.ipyingshe.com/download/bibleSoft"
     }];
@@ -276,11 +289,11 @@ function request (method, url, data, params, not_form) {
     return Axios(opts).then(function (result) {
         if ((result.status >= 500) && (result.status <= 600)) {
             if(IsAlert) alert('服务器错误，可稍候再试');
-            return;
+            return Promise.reject(result);
         }
         if (result.status !== 200) {
             if(IsAlert) alert(result);
-            return;
+            return Promise.reject(result);
         }
 
         result = result.data;
@@ -293,6 +306,7 @@ function request (method, url, data, params, not_form) {
         return result.data;
     }).catch(err => {
         if(IsAlert) alert(err);
+        return Promise.reject(err);
     })
 }
 

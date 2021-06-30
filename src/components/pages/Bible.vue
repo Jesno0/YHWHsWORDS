@@ -1,5 +1,4 @@
 <template>
-<!-- TODO: Cascader  -->
   <el-tabs v-model="currentCatalogueName" type="card">
     <el-tab-pane :label="currentVersionName" name="1" disabled></el-tab-pane>
     <el-tab-pane label=">" name="1-1" disabled></el-tab-pane>
@@ -57,7 +56,7 @@ export default {
       currentBookName: "书卷",
       currentChapterIndex: 0,
       currentChapterName: "章节",
-      currentCatalogueName: '5'
+      currentCatalogueName: "5"
     }
   },
   async mounted () {

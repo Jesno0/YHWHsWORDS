@@ -1,12 +1,15 @@
 <template>
-<div>
+<div class="main">
     <el-collapse-item :name="name">
-        <template slot="title">
-            <h3>{{title}}</h3>
+        <template class="mainTitle" slot="title">
+            <h3>{{title}}({{list.length}})</h3>
             <el-button icon="el-icon-plus" type="primary" circle @click.stop="handleShowAsk()"></el-button>
         </template>
         <el-collapse accordion>
-            <el-collapse-item v-for="(item,i) in list" :key="i" :title="String(i+1)+'. ['+item.nickName+'] '+item.question">
+            <el-collapse-item v-for="(item,i) in list" :key="i">
+                <span slot="title" class="subTitle">
+                    {{i+1}}.[{{item.nickName}}] {{item.question}}
+                </span>
                 <span>{{item.question}}</span>
             </el-collapse-item>
         </el-collapse>
@@ -61,4 +64,26 @@ export default {
 </script>
 
 <style scoped>
+.el-collapse-item /deep/ .el-collapse-item__header.is-active {
+    background-color:beige;
+}
+.el-collapse-item /deep/ .el-collapse-item__header {
+    font-size: 18px;
+}
+.el-collapse-item /deep/ .el-collapse-item__header span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.el-collapse-item /deep/ .el-collapse-item__content {
+    font-size: 18px;
+    padding-bottom: 5px;
+    word-break: break-all;
+}
+.el-button {
+    margin-left: 10px;
+    background-color: #47d07e;
+    border: none;
+    padding: 3px;
+}
 </style>

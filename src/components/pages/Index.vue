@@ -26,10 +26,11 @@ export default {
 
 <style scoped>
 .el-container {
-  height: 100%;
+  height: calc(92vh);
 }
 .el-main {
-  margin: 20px;
+  margin: 20px 0px;
+  height: 100%;
 }
 .el-footer {
   font-size: 13px;

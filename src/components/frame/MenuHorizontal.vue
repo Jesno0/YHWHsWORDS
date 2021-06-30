@@ -35,10 +35,8 @@ export default {
     async handleOpen (_index) {
         switch(_index.replace(/^\//,'')) {
             case 'mine':
-                if(!(await ApiCheckLogin())) {
-                    this.isShowAuth = true;
-                    this.$refs.menu.close(_index);
-                }
+                this.isShowAuth = !(await ApiCheckLogin().catch(err=>{return false}));
+                if(this.isShowAuth) this.$refs.menu.close(_index);
                 break;
         }
     }

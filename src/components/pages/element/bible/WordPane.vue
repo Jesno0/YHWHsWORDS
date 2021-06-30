@@ -3,7 +3,10 @@
         <Word class="word" :bookId="bookId" :chapterId="chapterId_v"/>
         <div class="footer">
             <el-button type="primary" icon="el-icon-arrow-left" circle :disabled="!isPreviousShow" @click="handlePrevious"></el-button>
-            <span v-if="isPunchIn">已打卡</span>
+            <span v-if="isPunchIn">
+                <h3>已打卡</h3>
+                <span>2021年6月30日 13:13:13</span>
+            </span>
             <el-button v-else type="text" class="punch-in" @click="handlePunchIn">打卡</el-button>
             <el-button type="primary" icon="el-icon-arrow-right" circle :disabled="!isNextShow" @click="handleNext"></el-button>
         </div>
@@ -93,7 +96,17 @@ export default {
 }
 .footer {
     margin-top: 10px;
-    display: -webkit-box;
-    -webkit-box-pack: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.footer span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 </style>

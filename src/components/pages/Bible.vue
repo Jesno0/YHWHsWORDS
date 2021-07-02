@@ -1,7 +1,7 @@
 <template>
   <el-tabs v-model="currentCatalogueName" type="card">
     <el-tab-pane :label="currentVersionName" name="1" :disabled="versions.length<2">
-      <TabRadio $ref="$version" :list="versions" :index="currentVersionIndex" v-on:select="handleTabSelect"/>
+      <TabCheckBox $ref="$version" :list="versions" :index="currentVersionIndex" v-on:change="handleTabSelect"/>
     </el-tab-pane>
     <el-tab-pane label=">" name="1-1" disabled></el-tab-pane>
 
@@ -21,7 +21,7 @@
     <el-tab-pane label=">" name="4-1" disabled></el-tab-pane>
     
     <el-tab-pane label="经文" name="5">
-      <WordPane :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length" @chapterChange="updateCurrentChapter"/>
+      <WordPane :versionId="versions.filter((v,i)=>currentVersionIndex.includes(i)).map(v=>v.id)" :bookId="books.length && books[currentBookIndex].id" :chapterId="chapters.length && chapters[currentChapterIndex].id" :chapterCount="chapters.length" @chapterChange="updateCurrentChapter"/>
     </el-tab-pane>
     <el-tab-pane label="|" name="5-1" disabled></el-tab-pane>
 
@@ -34,6 +34,7 @@
 <script>
 import {ApiBibleVersion,ApiBibleBookType,ApiBibleBook} from '../../js/Api'
 import TabRadio from './element/bible/TabRadio'
+import TabCheckBox from './element/bible/TabCheckBox'
 import WordPane from './element/bible/WordPane'
 import CommunicationPane from './element/bible/CommunicationPane'
 
@@ -42,6 +43,7 @@ export default {
   components: {
     WordPane,
     TabRadio,
+    TabCheckBox,
     CommunicationPane
   },
   data () {
@@ -50,7 +52,7 @@ export default {
       bookTypes: [],
       books: [],
       chapters: [],
-      currentVersionIndex: 0,
+      currentVersionIndex: [0],
       currentVersionName: "版本",
       currentBookTypeIndex: 1,
       currentBookTypeName: "新约",
@@ -72,8 +74,8 @@ export default {
     async updateBooks (_bookTypeIndex=1) {
       const {list:_list,userInfo} = await ApiBibleBook(this.bookTypes[_bookTypeIndex].id);
       this.books = _list;
-      const userIndex = userInfo && _list.findIndex(x=>x.id == userInfo.bookId);
-      this.currentBookIndex = Math.max(userIndex , 0);
+      const userIndex = userInfo && _list.findIndex(x=>x.id == userInfo.bookId) || 0;
+      this.currentBookIndex = Math.max(userIndex, 0);
       this.currentBookName = this.books[this.currentBookIndex].shortName || this.books[this.currentBookIndex].name;
       this.updateChapters(userIndex > -1 ? userInfo.charpterNo : 0);
     },
@@ -89,6 +91,10 @@ export default {
       const tabIndex = parseInt(this.currentCatalogueName);
       const {$ref:_ref,index:_index} = e;
       switch(_ref) {
+        case '$version':
+          this.currentVersionIndex = _index;
+          this.currentVersionName = _index.length == 1 ? (this.versions[_index[0]].shortName || this.versions[_index[0]].name) : "多版本";
+          return;
         case '$bookType':
           this.currentBookTypeIndex = _index;
           this.currentBookTypeName = this.bookTypes[_index].name;

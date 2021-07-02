@@ -35,7 +35,6 @@ const ApiBannar = async function () {
     }];
 };
 const ApiBibleVersion = async function () {
-    return ApiLocalData["/bible/version"];
     const back = await post("/bible/version");
     return back;
 };
@@ -65,7 +64,7 @@ const ApiBibleBook = async function (OldOrNew=2) {
 
     return {list,userInfo};
 };
-const ApiBibleWord = async function (bookId, charpterNo) {
+const ApiBibleWord = async function (bookId, charpterNo, versionIds) {
     let list = (await post(`/bible/getBible`, {bookId, charpterNo})) || [];
     let userInfo;
     let userIndex = list.findIndex(x=>x.maxTime);
@@ -78,7 +77,11 @@ const ApiBibleWord = async function (bookId, charpterNo) {
         }
     });
 
-    return {list,userInfo};
+    //TODO: versionIds
+    let words = [list];
+    if(versionIds.length > 1) words.push(list);
+
+    return {words,userInfo};
 };
 
 const ApiLogin = async function (loginName,password) {

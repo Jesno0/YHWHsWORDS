@@ -4,6 +4,10 @@
         "id": 1,
         "name": "新标点和合本",
         "shortName": "和合本"
+    },{
+        "id": 2,
+        "name": "雅伟和合本",
+        "shortName": "雅伟"
     }],
     "/bible/changeVolume": [
         {

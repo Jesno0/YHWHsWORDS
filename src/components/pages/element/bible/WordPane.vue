@@ -26,6 +26,9 @@ export default {
       Auth
   },
   props: {
+    versionId: {
+        type: Array
+    },
     bookId: {
         type: Number
     },
@@ -37,6 +40,10 @@ export default {
     }
   },
   watch: {
+    versionId(newV) {
+        console.log(newV)
+        this.updateWordList();
+    },
     chapterId() {
         this.updateArrow();
         this.updateWordList();
@@ -66,10 +73,10 @@ export default {
         this.isNextShow = this.chapterId < this.chapterCount;
     },
     async updateWordList () {
-        if(!this.bookId || !this.chapterId) return;
-        const {userInfo,list:_list} = await ApiBibleWord(this.bookId, this.chapterId);
+        if(!this.bookId || !this.chapterId || !this.versionId) return;
+        const {userInfo,words} = await ApiBibleWord(this.bookId, this.chapterId, this.versionId);
 
-        this.wordList = _list;
+        this.wordList = words;
         this.isPunchIn = Boolean(userInfo);
         this.punchInTime = userInfo ? userInfo.maxTime : "";
     },
